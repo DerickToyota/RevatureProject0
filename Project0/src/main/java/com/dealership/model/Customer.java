@@ -1,6 +1,6 @@
 package com.dealership.model;
 
-public class Customer {
+public class Customer extends Object{
     private int ID;
     private String firstName;
     private String lastName;
