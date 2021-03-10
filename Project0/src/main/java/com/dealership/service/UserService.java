@@ -1,7 +1,8 @@
 package com.dealership.service;
 
-import com.dealership.model.Customer;
+import com.dealership.db.GenericDao;
 import com.dealership.model.Employee;
+import com.dealership.model.User;
 
 
 /**
@@ -19,20 +20,24 @@ import com.dealership.model.Employee;
  */
 public class UserService {
 
+    GenericDao<User, String> uj;
 
-    private static Customer[] customers = new Customer[5];
+    public UserService(GenericDao<User, String> uj){
+        this.uj = uj;
+    }
+
+    private static User[] users = new User[5];
     // TODO: potential risk of overriting users if index is not incremented and decremented carefully
-    private static int currentCustomerIndex = -1;
+    private static int currentUserIndex = -1;
 
     private static Employee[] employees = new Employee[5];
     private static int currentEmployeeIndex = -1;
 
-
+    Employee e = new Employee("der","der","der","der","der","der");
 
 
     public boolean doesUsernameExist(String username){
-        // O(n) time complexity O(1) space complexity
-        return findCustomerByUsername(username) != null;
+        return uj.doesIDExist(username);
     }
 
     /*
@@ -48,36 +53,48 @@ public class UserService {
 
 
      */
-    public Customer findCustomerByUsername(String username){
+    public User findUserByUsername(String username){
+        return uj.getbyId(username);
+
         // O(n) time complexity O(1) space complexity
-        if(currentCustomerIndex > -1) {
-            for (int i = 0; i <= currentCustomerIndex; i++) {
-                if (customers[i].getUsername().equals(username)) {
-                    return customers[i];
-                }
-            }
-        }
-        return null;
+//        if(currentUserIndex > -1) {
+//            for (int i = 0; i <= currentUserIndex; i++) {
+//                if (users[i].getUsername().equals(username)) {
+//                    return users[i];
+//                }
+//            }
+//        }
+//        return null;
+
+
     }
 
 
     // TODO: Ensure duplicates do not exist, while minimizing calls to doesUsernameExist method.
-    /**
-    public boolean makeUser(String username, String password, String phoneNumber, String email){
+
+    public boolean makeUser(String username, String password, String firstName, String lastName, String phoneNumber, String email){
+
         if(!doesUsernameExist(username)){
-            if((currentIndex + 1) < users.length){
-                if(users[currentIndex+1] == null){
-                    users[++currentIndex] = new Customer(ID, firstName, lastName, email, username, password);
-                    return true;
-                }
+            if(1 == uj.save(new User(username, password, firstName, lastName, phoneNumber, email))){
+                return true;
             }
-        } else {
-            System.out.println("user already exists");
         }
         return false;
+//        if(!doesUsernameExist(username)){
+//            if((currentUserIndex + 1) < users.length){
+//                if(users[currentUserIndex+1] == null){
+//                    users[++currentUserIndex] = new User(username, password, firstName, lastName, phoneNumber, email);
+//                    System.out.println("Ready to insert user " + username+ " reginto the db at this point");
+//                    uj.save(new User(username, password, firstName, lastName, phoneNumber, email));
+//                    return true;
+//                }
+//            }
+//        } else {
+//            System.out.println("user already exists");
+//        }
+//        return false;
     }
-     */
-
+/*
     public boolean makeCustomer(String username, String password, String phoneNumber, String email){
         if(!doesUsernameExist(username)){
             if((currentCustomerIndex + 1) < customers.length){
@@ -91,11 +108,13 @@ public class UserService {
         }
         return false;
     }
-
+*/
     
 
     public Employee findEmployeeByUsername(String username) {
-
-
+        System.out.println("find Employee by Username Not implemented YET");
+        System.out.println("Queries the database to see if the username and password match");
+     // return null;
+        return new Employee("der","der","der","der","der","der");
     }
 }

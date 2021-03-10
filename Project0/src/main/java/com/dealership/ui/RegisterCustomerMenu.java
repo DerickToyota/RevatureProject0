@@ -1,5 +1,7 @@
 package com.dealership.ui;
 
+import com.dealership.db.DaoFactory;
+import com.dealership.model.User;
 import com.dealership.service.UserService;
 
 import java.util.Scanner;
@@ -7,7 +9,7 @@ import java.util.Scanner;
 public class RegisterCustomerMenu {
 
     public void showMenu(Scanner scan) {
-        UserService us = new UserService();
+        UserService us = new UserService(DaoFactory.daoFactory(User.class));
         System.out.println("====Welcome to the Dealership====");
         String username = "";
         // hey something is wrong
@@ -32,9 +34,8 @@ public class RegisterCustomerMenu {
         String email = scan.nextLine();
 
         //TODO: Make Customer instead of a User
-        System.out.println(us.makeCustomer(username, password, phoneNumber, email) ?
-                "successfully Registered " + username :
-                "cancelled registration");
+        System.out.println(us.makeUser(username, password, firstName, lastName, phoneNumber, email) ?
+                "successfully Registered " + username : "cancelled registration");
 
     }
 }
